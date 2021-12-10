@@ -42,7 +42,7 @@ const Login = (props) => {
                 localStorage.setItem("userName", JSON.stringify(response.data.firstName + " " + response.data.lastName))
                 setLoading(false)
 
-                navigate("/call")
+                navigate("/dashboard")
             }
 
             )

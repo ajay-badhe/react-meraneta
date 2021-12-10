@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 const AddCall = () => {
     const [validated, setValidated] = useState(false);
-    const navigate = useNavigate
+    const navigate = useNavigate()
     const [showMenu, setShowMenu] = useState();
     const [assembliesList, setAssembliesList] = useState([]);
     const [assemblies, setAssemblies] = useState('')

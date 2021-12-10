@@ -36,7 +36,7 @@ const Call = () => {
     }
 
     // Call list api call
-    const apiCall = (listbody, API) => {
+    const apiCall = (API, listbody) => {
         setLoading(true)
         axios.post(API, listbody, {
             headers: {
