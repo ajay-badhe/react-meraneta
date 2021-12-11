@@ -6,8 +6,6 @@ const Dashboard = () => {
     const [showMenu, setShowMenu] = useState()
 
 
-
-    const tableHeading = ["Date", "Name", "Mobile Number", "Email", 'Priority', 'Actions']
     const getToggleData = (toggle) => {
         setShowMenu(toggle)
     }

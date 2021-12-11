@@ -4,13 +4,13 @@ import { Col, Dropdown, Pagination, Row, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Header from '../../Components/Header'
 import Sidebar from '../../Components/Sidebar'
-import TableData from '../../Components/TableData';
 import { LATTER_TYPES } from '../../constants/letterType';
 import { REGISTER_LIST, REGISTER_LIST_DELETE } from '../../constants/register';
 import RegisterTable from './RegisterTable';
+import { useNavigate } from 'react-router';
 
 const RegisterList = () => {
-
+    const navigate = useNavigate()
     const [showMenu, setShowMenu] = useState();
     const [search, setSearch] = useState('');
     const [priority, setPriority] = useState('');
@@ -87,6 +87,11 @@ const RegisterList = () => {
             })
     }
 
+    // edit Handler
+    const editHandler = (editData) => {
+        console.log(editData)
+        navigate("/addRegister")
+    }
 
     // pagination
     const paginationRout = (pageNumber) => {
@@ -251,7 +256,7 @@ const RegisterList = () => {
 
                         {loading ? <div className="spinner"><Spinner animation="border" /> </div> :
                             <>
-                                <RegisterTable list={registerList} deleteHandler={deleteHandler} tableHeading={tableHeading} />
+                                <RegisterTable list={registerList} editHandler={editHandler} deleteHandler={deleteHandler} tableHeading={tableHeading} />
                                 <Pagination>
                                     <Pagination.First onClick={firstPage} disabled={pagination[0] === currentPage} />
                                     <Pagination.Prev onClick={PrevPage} disabled={pagination[0] === currentPage} />

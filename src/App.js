@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Call from './Screens/Call';
 import AddCall from './Screens/AddCall';
 import RegisterList from './Screens/register/RegisterList';
+import AddRegister from './Screens/register/AddRegister';
 
 
 function App() {
@@ -17,7 +18,9 @@ function App() {
         <Route path="/" element={<Login />} />
         <Route path="/call" element={<Call />} />
         <Route path="/addCall" element={<AddCall />} />
-        <Route path="/register" element={<RegisterList />} />
+        <Route path="/register/list" element={<RegisterList />} />
+        <Route path="/addRegister" element={<AddRegister />} />
+        <Route path={`/register/edit/:id`} element={<AddRegister />} />
 
 
 

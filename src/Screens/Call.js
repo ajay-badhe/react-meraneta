@@ -101,7 +101,7 @@ const Call = () => {
                 "size": 10
             }
         }
-        apiCall(body, CALL_LIST)
+        apiCall(CALL_LIST, body)
         setClearFilter(true)
     }
 
@@ -109,7 +109,7 @@ const Call = () => {
     // pagination
     const paginationRout = (pageNumber) => {
         const body = { "page": { "number": pageNumber, "size": 10 } };
-        apiCall(body, CALL_LIST)
+        apiCall(CALL_LIST, body)
         setCurrentPage(pageNumber)
         console.log(pageNumber)
     }
@@ -118,31 +118,31 @@ const Call = () => {
         let next = currentPage + 1
         setCurrentPage(next)
         const body = { "page": { "number": next, "size": 10 } };
-        apiCall(body, CALL_LIST)
+        apiCall(CALL_LIST, body)
     }
     const PrevPage = () => {
         let next = currentPage - 1
         setCurrentPage(next)
         const body = { "page": { "number": next, "size": 10 } };
-        apiCall(body, CALL_LIST)
+        apiCall(CALL_LIST, body)
     }
     const firstPage = () => {
         let first = pagination[0]
         setCurrentPage(first)
         const body = { "page": { "number": first, "size": 10 } };
-        apiCall(body, CALL_LIST)
+        apiCall(CALL_LIST, body)
     }
     const lastPage = () => {
         let last = pagination[pagination.length - 1]
         setCurrentPage(last)
         const body = { "page": { "number": last, "size": 10 } };
-        apiCall(body, CALL_LIST)
+        apiCall(CALL_LIST, body)
     }
 
     // get list from api
     const getList = () => {
         const body = { "page": { "number": 0, "size": 10 } };
-        apiCall(body, CALL_LIST)
+        apiCall(CALL_LIST, body)
     }
 
     const clearFilterHandler = () => {
