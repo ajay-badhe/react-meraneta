@@ -39,7 +39,7 @@ const Header = (props) => {
                         style={{ maxHeight: '100px' }}
                         navbarScroll
                     >
-                        <Link className="nav-link" to={'/register'}>  Register </Link>
+                        <Link className="nav-link" to={'/register/list'}>  Register </Link>
                         <Link className="nav-link" to={'/call'}>  Call </Link>
                         <Link className="nav-link" to={'/visitor'}>  Visitor </Link>
                     </Nav>

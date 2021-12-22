@@ -10,7 +10,6 @@ import AddRegister from './Screens/register/AddRegister';
 
 
 function App() {
-  const token = JSON.parse(localStorage.getItem("authToken"));
   return (
     <Router>
       <Routes>

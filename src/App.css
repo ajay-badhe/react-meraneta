@@ -189,6 +189,9 @@ label {
   padding: 6px 0;
   display: block;
   user-select: none;
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
   pointer-events: none;
 }
 .switch-button-checkbox + .switch-button-label:before {
@@ -205,4 +208,38 @@ label {
 }
 .switch-button-checkbox + .switch-button-label .switch-button-label-span {
   position: relative;
+}
+
+/* table collapse */
+
+.collapsed .fa-chevron-down {
+  transform: rotate(270deg);
+}
+
+.row fieldset {
+  display: block;
+  margin-inline-start: 2px;
+  margin-inline-end: 2px;
+  padding-block-start: 0.35em;
+  padding-inline-start: 0.75em;
+  padding-inline-end: 0.75em;
+  padding-block-end: 0.625em;
+  min-inline-size: min-content;
+  border-width: 2px;
+  border-style: groove;
+  border-color: threedface;
+  border-image: initial;
+}
+
+.row legend {
+  display: block;
+  padding-inline-start: 2px;
+  padding-inline-end: 2px;
+  border-width: initial;
+  border-style: none;
+  border-color: initial;
+  border-image: initial;
+  font-size: 14px;
+  float: unset;
+  width: unset;
 }

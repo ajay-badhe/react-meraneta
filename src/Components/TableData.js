@@ -1,8 +1,11 @@
+import moment from 'moment'
 import React from 'react'
 import { Card, Table } from 'react-bootstrap'
+import { useSelector } from 'react-redux';
 
 const TableData = (props) => {
-    // console.log("list" + JSON.stringify(props.list))
+    const list = useSelector(state => state.CallList.CallList);
+    console.log("list", list)
     return (
         <Card body className="h-100">
             <Table striped hover className="mt-2 w-100">
@@ -19,12 +22,12 @@ const TableData = (props) => {
                 </thead>
                 <tbody>
                     {
-                        props.list?.length === 0 ? "no data found" :
-                            props.list.map((data, index) => {
+                        list?.length === 0 ? "no data found" :
+                            list.map((data, index) => {
                                 return (
                                     <tr key={index}>
                                         <td>
-                                            {data.date}
+                                            {moment(data.date).format('DD/MM/YYYY')}
                                         </td>
                                         <td>{data.callFrom.firstName}</td>
                                         <td>{data.callFrom.phone}</td>

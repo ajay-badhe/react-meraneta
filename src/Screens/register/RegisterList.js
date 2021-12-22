@@ -7,10 +7,8 @@ import Sidebar from '../../Components/Sidebar'
 import { LATTER_TYPES } from '../../constants/letterType';
 import { REGISTER_LIST, REGISTER_LIST_DELETE } from '../../constants/register';
 import RegisterTable from './RegisterTable';
-import { useNavigate } from 'react-router';
 
 const RegisterList = () => {
-    const navigate = useNavigate()
     const [showMenu, setShowMenu] = useState();
     const [search, setSearch] = useState('');
     const [priority, setPriority] = useState('');
@@ -60,7 +58,7 @@ const RegisterList = () => {
 
     // getList
     const getList = () => {
-        const body = { 'page': { 'number': 2, 'size': 10 } }
+        const body = { 'page': { 'number': 0, 'size': 10 } }
         apiCall(REGISTER_LIST, body)
     }
 
@@ -88,10 +86,10 @@ const RegisterList = () => {
     }
 
     // edit Handler
-    const editHandler = (editData) => {
-        console.log(editData)
-        navigate("/addRegister")
-    }
+    // const editHandler = (editData) => {
+    //     // console.log(editData)
+    //     navigate("/addRegister")
+    // }
 
     // pagination
     const paginationRout = (pageNumber) => {
@@ -135,13 +133,20 @@ const RegisterList = () => {
         else {
             entryTypeFilter = ""
         }
+
+        let latterTypeFilter
+        if (latterType) {
+            latterTypeFilter = { "id": latterType }
+        }
+        else {
+            latterTypeFilter = ""
+        }
+
         const body = {
             "dateFrom": startDate,
             "dateTo": endDate,
             "search": search,
-            "letterType": {
-                "id": latterType
-            },
+            "letterType": latterTypeFilter,
             'entryType': entryTypeFilter,
             "page": {
                 "number": 0,
@@ -159,6 +164,7 @@ const RegisterList = () => {
         setStartDate('')
         setEndDate('')
         setEntryType('')
+        setLatterType('')
         setShowClear(false)
         getList();
     }
@@ -209,8 +215,8 @@ const RegisterList = () => {
                                                 <select value={priority} onChange={(e) => setPriority(e.target.value)}>
                                                     <option value=""> Select Priority  </option>
                                                     <option value="VIP">  VIP </option>
-                                                    <option value="Important">  Important </option>
-                                                    <option value="Regular">  Regular </option>
+                                                    <option value="IMPORTANT">  Important </option>
+                                                    <option value="REGULAR">  Regular </option>
                                                 </select>
 
                                             </Col>
@@ -220,7 +226,7 @@ const RegisterList = () => {
                                                     <option value="">  Latter Type </option>
                                                     {
                                                         latterTypeList.map((items) => (
-                                                            <option value={items.id}>  {items.name}</option>
+                                                            <option key={items.id} value={items.id}>  {items.name}</option>
                                                         ))
                                                     }
                                                 </select>
@@ -256,7 +262,7 @@ const RegisterList = () => {
 
                         {loading ? <div className="spinner"><Spinner animation="border" /> </div> :
                             <>
-                                <RegisterTable list={registerList} editHandler={editHandler} deleteHandler={deleteHandler} tableHeading={tableHeading} />
+                                <RegisterTable list={registerList} deleteHandler={deleteHandler} tableHeading={tableHeading} />
                                 <Pagination>
                                     <Pagination.First onClick={firstPage} disabled={pagination[0] === currentPage} />
                                     <Pagination.Prev onClick={PrevPage} disabled={pagination[0] === currentPage} />

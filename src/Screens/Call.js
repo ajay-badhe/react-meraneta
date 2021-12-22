@@ -7,8 +7,29 @@ import TableData from '../Components/TableData'
 import { Col, Dropdown, Pagination, Row, Spinner } from 'react-bootstrap'
 // import { ASSEMBLIES_URL } from '../constants/assembies'
 import { Link } from 'react-router-dom'
+import { useSelector, useDispatch } from "react-redux";
+import { setCallListAction } from "../actions";
 
 const Call = () => {
+
+    const dispatch = useDispatch()
+
+    const fetchCallList = async () => {
+        const body = { "page": { "number": 1, "size": 10 } };
+        setLoading(true)
+        await axios.post(CALL_LIST, body, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                dispatch(setCallListAction(response.data[0]));
+            })
+            .catch(err => {
+                console.log({ err });
+            })
+    };
+
     const [callList, setCallList] = useState([])
     const [showMenu, setShowMenu] = useState()
     const [count, setCount] = useState(0)
@@ -34,6 +55,9 @@ const Call = () => {
     const getToggleData = (toggle) => {
         setShowMenu(toggle)
     }
+
+
+
 
     // Call list api call
     const apiCall = (API, listbody) => {
@@ -159,7 +183,7 @@ const Call = () => {
 
     useEffect(() => {
         getList();
-
+        fetchCallList();
         // get assemblies
         // axios.get(ASSEMBLIES_URL, {
         //     headers: {
