@@ -1,10 +1,10 @@
-import CallListReducer from "./callList";
+import CallListReducer from "./callListReducer";
 import { combineReducers } from "redux"
 
-const reducers = combineReducers(
+const rootReducers = combineReducers(
     {
         CallList: CallListReducer
     }
 )
 
-export default reducers
+export default rootReducers

@@ -5,46 +5,25 @@ import Header from '../Components/Header'
 import Sidebar from '../Components/Sidebar'
 import TableData from '../Components/TableData'
 import { Col, Dropdown, Pagination, Row, Spinner } from 'react-bootstrap'
-// import { ASSEMBLIES_URL } from '../constants/assembies'
 import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from "react-redux";
-import { setCallListAction } from "../actions";
+import { fetchCallList } from "../actions";
 
 const Call = () => {
-
-    const dispatch = useDispatch()
-
-    const fetchCallList = async () => {
-        const body = { "page": { "number": 1, "size": 10 } };
-        setLoading(true)
-        await axios.post(CALL_LIST, body, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                dispatch(setCallListAction(response.data[0]));
-            })
-            .catch(err => {
-                console.log({ err });
-            })
-    };
-
     const [callList, setCallList] = useState([])
     const [showMenu, setShowMenu] = useState()
     const [count, setCount] = useState(0)
-    const [loading, setLoading] = useState(true)
     const [clearFilter, setClearFilter] = useState(false)
     const [search, setSearch] = useState('')
     const [priority, setPriority] = useState("")
-    // const [assembliesList, setAssembliesList] = useState([])
     const [assemblies, setAssemblies] = useState("")
     const [startDate, setStartDate] = useState("")
     const [endDate, setEndDate] = useState("")
     const [currentPage, setCurrentPage] = useState(0)
 
-
+    const dispatch = useDispatch()
     const token = JSON.parse(localStorage.getItem('authToken'))
+    const { loading, CallList } = useSelector(state => state.CallList)
 
     let pagination = [];
     for (var i = 0; i < Math.ceil(count / 10); i++) {
@@ -61,7 +40,6 @@ const Call = () => {
 
     // Call list api call
     const apiCall = (API, listbody) => {
-        setLoading(true)
         axios.post(API, listbody, {
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -70,22 +48,19 @@ const Call = () => {
             .then(response => {
                 setCallList(response.data[0])
                 setCount(response.data[1])
-                setLoading(false)
             })
             .catch(err => {
                 console.log({ err });
-                setLoading(false)
-
             })
     }
 
 
     // Delete Handler
-    const deleteHandler = (deltedData) => {
-        deltedData.recordStatus = 'DELETED'
-        const body = deltedData;
+    const deleteHandler = (deletedData) => {
+        deletedData.recordStatus = 'DELETED'
+        const body = deletedData;
         const token = JSON.parse(localStorage.getItem('authToken'))
-        axios.put(DELETE_CALL_LIST + '/' + deltedData.id, body, {
+        axios.put(DELETE_CALL_LIST + '/' + deletedData.id, body, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -93,7 +68,7 @@ const Call = () => {
             .then(response => {
                 let list = [...callList]
                 let newList = list.map((item) => {
-                    if (item.id === deltedData.id) {
+                    if (item.id === deletedData.id) {
                         item.recordStatus = 'DELETED'
                     }
                     return item
@@ -114,26 +89,14 @@ const Call = () => {
         else {
             priorityFilter = ""
         }
-        const body = {
-            "dateFrom": startDate,
-            "dateTo": endDate,
-            "search": search,
-            "priority": priorityFilter,
-            "assembly": assemblies,
-            "page": {
-                "number": 0,
-                "size": 10
-            }
-        }
-        apiCall(CALL_LIST, body)
+        fetchCallList(dispatch, 0, startDate, endDate, search, priorityFilter, assemblies)
         setClearFilter(true)
     }
 
 
     // pagination
     const paginationRout = (pageNumber) => {
-        const body = { "page": { "number": pageNumber, "size": 10 } };
-        apiCall(CALL_LIST, body)
+        fetchCallList(dispatch, pageNumber);
         setCurrentPage(pageNumber)
         console.log(pageNumber)
     }
@@ -141,36 +104,30 @@ const Call = () => {
     const NextPage = () => {
         let next = currentPage + 1
         setCurrentPage(next)
-        const body = { "page": { "number": next, "size": 10 } };
-        apiCall(CALL_LIST, body)
+        console.log("prev", next);
+        fetchCallList(dispatch, next);
     }
     const PrevPage = () => {
-        let next = currentPage - 1
-        setCurrentPage(next)
-        const body = { "page": { "number": next, "size": 10 } };
-        apiCall(CALL_LIST, body)
+        let prev = currentPage - 1
+        setCurrentPage(prev)
+        console.log("prev", prev);
+        fetchCallList(dispatch, prev);
     }
     const firstPage = () => {
         let first = pagination[0]
         setCurrentPage(first)
-        const body = { "page": { "number": first, "size": 10 } };
-        apiCall(CALL_LIST, body)
+        fetchCallList(dispatch, first);
     }
     const lastPage = () => {
         let last = pagination[pagination.length - 1]
         setCurrentPage(last)
-        const body = { "page": { "number": last, "size": 10 } };
-        apiCall(CALL_LIST, body)
+        fetchCallList(dispatch, last);
+
     }
 
-    // get list from api
-    const getList = () => {
-        const body = { "page": { "number": 0, "size": 10 } };
-        apiCall(CALL_LIST, body)
-    }
 
     const clearFilterHandler = () => {
-        getList()
+        fetchCallList(dispatch, 1);
         setSearch("")
         setPriority("")
         setStartDate("")
@@ -182,22 +139,12 @@ const Call = () => {
 
 
     useEffect(() => {
-        getList();
-        fetchCallList();
-        // get assemblies
-        // axios.get(ASSEMBLIES_URL, {
-        //     headers: {
-        //         'Authorization': `Bearer ${token}`
-        //     }
-        // })
-        //     .then(response => {
-        //         setAssembliesList(response.data)
-
-        //     }).catch(error => {
-        //         console.log({ error })
-        //     })
-
+        fetchCallList(dispatch, 1);
     }, [])
+
+    useEffect(() => {
+        setCount(CallList[1])
+    }, [CallList])
 
 
 
@@ -259,7 +206,7 @@ const Call = () => {
                         </div>
                         {loading ? <div className="spinner"><Spinner animation="border" /> </div> :
                             <>
-                                <TableData list={callList} deleteHandler={deleteHandler} tableHeading={tableHeading} />
+                                <TableData deleteHandler={deleteHandler} tableHeading={tableHeading} />
                                 <Pagination>
                                     <Pagination.First onClick={firstPage} disabled={pagination[0] === currentPage} />
                                     <Pagination.Prev onClick={PrevPage} disabled={pagination[0] === currentPage} />
