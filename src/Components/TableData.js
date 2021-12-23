@@ -1,14 +1,22 @@
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import { Card, Table } from 'react-bootstrap'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteHandler } from '../actions';
 
 const TableData = (props) => {
+    const dispatch = useDispatch()
     const [list, setList] = useState([])
     const { CallList } = useSelector(state => state.CallList)
 
-    useEffect(() => {
+
+    const deleteItem = (data) => {
+        deleteHandler(data, dispatch)
         setList(CallList[0]);
+    }
+
+    useEffect(() => {
+        setList(CallList[0] || []);
     }, [])
 
     return (
@@ -41,7 +49,7 @@ const TableData = (props) => {
                                         <td>
                                             {
                                                 data.recordStatus === "DELETED" ? <span className="text-danger">DELETED</span> :
-                                                    <button onClick={() => props.deleteHandler(data)} className="btn btn-danger">
+                                                    <button onClick={() => deleteItem(data)} className="btn btn-danger">
                                                         Delete
                                                     </button>
                                             }

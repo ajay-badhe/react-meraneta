@@ -1,23 +1,23 @@
 import axios from "axios";
-import { CALL_LIST } from "../constants/callList";
+import { CALL_LIST, DELETE_CALL_LIST } from "../constants/callList";
 import { SET_CALL_LIST_BEGIN, SET_CALL_LIST_FAIL, SET_CALL_LIST_SUCCESS } from "../constants/callListActionConstant";
 import { headers } from "../constants/Token";
 
 
 
 
-export const fetchCallList = (dispatch, page, startDate, endDate, search, priorityFilter, assemblies) => {
+export const fetchCallList = (dispatch, page, startDate, endDate, search, priorityFilter) => {
     const body = {
         "dateFrom": startDate || "",
         "dateTo": endDate || "",
         "search": search || "",
         "priority": priorityFilter || "",
-        "assembly": assemblies || "",
         "page": {
-            "number": page,
+            "number": page || 0,
             "size": 10
         }
     };
+    console.log("Bpda bdaya==", body);
     dispatch({
         type: SET_CALL_LIST_BEGIN
     })
@@ -39,3 +39,19 @@ export const fetchCallList = (dispatch, page, startDate, endDate, search, priori
             })
         })
 };
+
+
+// Delete Handler
+export const deleteHandler = (deletedData, dispatch) => {
+    deletedData.recordStatus = 'DELETED'
+    const body = deletedData;
+    axios.put(DELETE_CALL_LIST + '/' + deletedData.id, body, {
+        headers
+    })
+        .then(response => {
+
+            fetchCallList(dispatch)
+        }).catch(err => {
+            console.log({ err })
+        })
+}

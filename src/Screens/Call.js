@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { CALL_LIST, DELETE_CALL_LIST } from '../constants/callList'
 import Header from '../Components/Header'
 import Sidebar from '../Components/Sidebar'
 import TableData from '../Components/TableData'
@@ -10,13 +9,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchCallList } from "../actions";
 
 const Call = () => {
-    const [callList, setCallList] = useState([])
     const [showMenu, setShowMenu] = useState()
     const [count, setCount] = useState(0)
     const [clearFilter, setClearFilter] = useState(false)
     const [search, setSearch] = useState('')
     const [priority, setPriority] = useState("")
-    const [assemblies, setAssemblies] = useState("")
+    // const [assemblies, setAssemblies] = useState("")
     const [startDate, setStartDate] = useState("")
     const [endDate, setEndDate] = useState("")
     const [currentPage, setCurrentPage] = useState(0)
@@ -35,51 +33,6 @@ const Call = () => {
         setShowMenu(toggle)
     }
 
-
-
-
-    // Call list api call
-    const apiCall = (API, listbody) => {
-        axios.post(API, listbody, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                setCallList(response.data[0])
-                setCount(response.data[1])
-            })
-            .catch(err => {
-                console.log({ err });
-            })
-    }
-
-
-    // Delete Handler
-    const deleteHandler = (deletedData) => {
-        deletedData.recordStatus = 'DELETED'
-        const body = deletedData;
-        const token = JSON.parse(localStorage.getItem('authToken'))
-        axios.put(DELETE_CALL_LIST + '/' + deletedData.id, body, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                let list = [...callList]
-                let newList = list.map((item) => {
-                    if (item.id === deletedData.id) {
-                        item.recordStatus = 'DELETED'
-                    }
-                    return item
-                })
-                setCallList(newList)
-            }).catch(err => {
-                console.log({ err })
-            })
-    }
-
-
     // search handler
     const searchHandler = () => {
         let priorityFilter
@@ -89,7 +42,7 @@ const Call = () => {
         else {
             priorityFilter = ""
         }
-        fetchCallList(dispatch, 0, startDate, endDate, search, priorityFilter, assemblies)
+        fetchCallList(dispatch, 0, startDate, endDate, search, priorityFilter)
         setClearFilter(true)
     }
 
@@ -139,7 +92,7 @@ const Call = () => {
 
 
     useEffect(() => {
-        fetchCallList(dispatch, 1);
+        fetchCallList(dispatch, 0);
     }, [])
 
     useEffect(() => {
@@ -206,7 +159,7 @@ const Call = () => {
                         </div>
                         {loading ? <div className="spinner"><Spinner animation="border" /> </div> :
                             <>
-                                <TableData deleteHandler={deleteHandler} tableHeading={tableHeading} />
+                                <TableData tableHeading={tableHeading} />
                                 <Pagination>
                                     <Pagination.First onClick={firstPage} disabled={pagination[0] === currentPage} />
                                     <Pagination.Prev onClick={PrevPage} disabled={pagination[0] === currentPage} />
