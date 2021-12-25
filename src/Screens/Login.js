@@ -1,24 +1,28 @@
 import React, { useState } from 'react'
 import { Form, Button, Container, FloatingLabel, Spinner } from 'react-bootstrap'
-import axios from 'axios'
-import { LOGIN_URL } from '../constants/login'
 import { useNavigate } from "react-router-dom";
+import { signin } from '../actions/loginAction';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const Login = (props) => {
     let navigate = useNavigate();
     const [userName, setUserName] = useState('')
     const [password, setPassword] = useState('')
-    const [res, setRes] = useState()
     const [error, setError] = useState(false)
     const [userNameError, setUserNameError] = useState(false)
     const [passwordError, setPasswordError] = useState(false)
-    const [loading, setLoading] = useState(false)
+
+    const { loading } = useSelector(state => state.userSignin)
+
+
+    const dispatch = useDispatch()
 
     // submit handler
     const submitHandler = (e) => {
         e.preventDefault();
-
+        signin(userName, password, dispatch)
+        navigate("/dashboard")
         if (!userName) {
             setUserNameError(true)
         }
@@ -31,28 +35,6 @@ const Login = (props) => {
             setPasswordError(false)
 
         }
-
-        const body = { "username": userName, "password": password, "deviceId": "dapxDzCySkg:APA91bFte8-oCXMYKJp016cUG7DcGprawTKhzxOSVXA7B55TzYTuYPTPZ6QLAT3Ei8wu0WKc0eIbBlQJosDq50s_fn66Bu0RRla2sPKNEBorqRJfTwTAlC_ssuCSb6Fur7PgqnMHeseo" };
-        setLoading(true)
-        axios.post(LOGIN_URL, body)
-            .then(response => {
-                setRes(response.data)
-                localStorage.setItem("login", JSON.stringify(response.data))
-                localStorage.setItem("authToken", JSON.stringify(response.data?.accessToken))
-                localStorage.setItem("userName", JSON.stringify(response.data.firstName + " " + response.data.lastName))
-                setLoading(false)
-
-                navigate("/dashboard")
-            }
-
-            )
-            .catch(err => {
-                setError(true)
-                console.log({ err });
-                setLoading(false)
-            })
-
-
     }
     return (
         <div>

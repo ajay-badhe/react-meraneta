@@ -1,16 +1,21 @@
 import Button from '@restart/ui/esm/Button'
 import React, { useEffect, useState } from 'react'
 import { Container, Navbar, Nav, Form, FormControl, NavDropdown } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from "react-router-dom";
+import { signout } from '../actions/loginAction';
 const Header = (props) => {
 
+    const dispatch = useDispatch()
+    const { userInfo } = useSelector(state => state.userSignin)
 
     let navigate = useNavigate();
     const [uName, setUName] = useState('')
     const [toggle, setToogle] = useState(false)
 
     const logoutHandler = () => {
-        localStorage.clear()
+        signout(dispatch)
+        localStorage.removeItem('authToken');
         navigate("/")
     }
 
@@ -20,8 +25,8 @@ const Header = (props) => {
     }
 
     useEffect(() => {
-        setUName(JSON.parse(localStorage.getItem("userName")))
-    }, [])
+        setUName(`${userInfo?.firstName} ${userInfo?.lastName}`)
+    }, [userInfo])
 
     return (
         <Navbar className="navbar" expand="lg">

@@ -4,8 +4,8 @@ import Sidebar from '../Components/Sidebar'
 
 const Dashboard = () => {
     const [showMenu, setShowMenu] = useState()
-    const userInfo = JSON.parse(localStorage.getItem('login'))
-    console.log(userInfo)
+    // const userInfo = JSON.parse(localStorage.getItem('login'))
+    // console.log(userInfo)
 
     const getToggleData = (toggle) => {
         setShowMenu(toggle)
@@ -18,7 +18,7 @@ const Dashboard = () => {
                 <Sidebar />
                 <div className="Layout">
                     <div className="w-100 p-2">
-                        {
+                        {/* {
                             userInfo.role === "SUPER_ADMIN" &&
 
                             < h3 > Super Admin Dashboard</h3>
@@ -27,7 +27,7 @@ const Dashboard = () => {
                             userInfo.role === "SYSTEM_ADMIN" &&
 
                             < h3 > System Admin Dashboard</h3>
-                        }
+                        } */}
                     </div>
                 </div>
 

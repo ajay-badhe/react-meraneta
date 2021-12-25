@@ -480,7 +480,7 @@ const AddRegister = () => {
                             </Row>
                             <hr />
                             <label>
-                                <h5>Document {documentType != "INWARD" ? "From" : "For"}</h5>
+                                <h5>Document {documentType !== "INWARD" ? "From" : "For"}</h5>
                             </label>
                             <CommonForm
                                 updateCommanForm={updateDocumentCommanForm}
@@ -502,7 +502,7 @@ const AddRegister = () => {
 
                             <hr />
                             <label>
-                                <h5>{documentType != "INWARD" ? "Deliverd By" : "Received By"}</h5>
+                                <h5>{documentType !== "INWARD" ? "Deliverd By" : "Received By"}</h5>
                             </label>
                             <CommonForm
 
